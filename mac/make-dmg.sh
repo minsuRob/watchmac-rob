@@ -3,6 +3,7 @@
 # notary 프로필이 등록돼 있으면 자동 공증, 없으면 서명만 된 DMG 까지만.
 set -e
 cd "$(dirname "$0")"
+source ../scripts/load-signing.sh   # signing.local.md 의 WATCHMAC_* 값
 
 APP="watchmac.app"
 DMG="watchmac.dmg"

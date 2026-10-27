@@ -47,6 +47,8 @@ cd mac
 
 첫 실행 시 화면 기록 권한 요청. 권한 켠 뒤 한 번 종료하고 다시 여세요.
 
+> 서명 인증서는 [`signing.example.md`](signing.example.md) 를 `signing.local.md` 로 복사해 적어 두면 빌드 스크립트가 자동으로 읽습니다 (커밋 안 됨). 인증서 없이 ad-hoc 서명이면 빌드할 때마다 화면 기록 권한을 다시 줘야 합니다.
+
 메뉴에서:
 - 상태 (켜짐/꺼짐) · 보는 사람 수
 - LAN 주소 (같은 WiFi)
@@ -57,12 +59,12 @@ cd mac
 
 ```bash
 cd watch
-xcodegen generate
+./generate.sh           # xcodegen generate + signing.local.md 의 팀 ID 적용
 open WatchMac.xcodeproj
 ```
 
 Xcode에서:
-1. TARGETS → WatchMac → Signing & Capabilities → 본인 Apple ID 선택
+1. (`signing.local.md` 에 `WATCHMAC_TEAM_ID` 가 없으면) TARGETS → WatchMac → Signing & Capabilities → 본인 Apple ID 선택
 2. (페어 아이폰 USB 연결 + 워치/폰 개발자 모드 ON)
 3. 디바이스 셀렉터에서 본인 워치 선택 → ▶ Run
 

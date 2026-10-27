@@ -30,3 +30,6 @@ watch/Info.plist
 
 # Local build output
 watch/build/
+
+# Local signing values (see signing.example.md)
+signing.local.md

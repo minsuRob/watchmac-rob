@@ -3,8 +3,9 @@
 # Developer ID 인증서가 있으면 hardened runtime 으로 정식 서명, 없으면 ad-hoc.
 set -e
 cd "$(dirname "$0")"
+source ../scripts/load-signing.sh   # signing.local.md 의 WATCHMAC_* 값
 
-# 서명 ID — 환경변수로 덮어쓸 수 있음. 기본은 보유한 Developer ID.
+# 서명 ID — 환경변수 > signing.local.md > 기본값(원작자 Developer ID) 순.
 SIGN_ID="${WATCHMAC_SIGN_ID:-Developer ID Application: Jahyeon Ko (RP5GZ99V95)}"
 
 echo "① 빌드 중… (처음엔 조금 걸려요)"
