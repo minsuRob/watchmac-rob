@@ -27,3 +27,6 @@ watch/Info.plist
 # OMC runtime state
 .omc/
 .vercel
+
+# Local build output
+watch/build/

@@ -38,7 +38,9 @@ final class Tunnel {
 
         let proc = Process()
         proc.executableURL = URL(fileURLWithPath: binary)
-        proc.arguments = ["tunnel", "--url", "http://localhost:\(localPort)", "--no-autoupdate"]
+        // --config /dev/null: ignore ~/.cloudflared/config.yml. A named-tunnel config there
+        // has ingress rules that override --url and make every quick-tunnel request 404.
+        proc.arguments = ["tunnel", "--config", "/dev/null", "--url", "http://localhost:\(localPort)", "--no-autoupdate"]
 
         let pipe = Pipe()
         proc.standardOutput = pipe

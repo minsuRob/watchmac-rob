@@ -105,16 +105,7 @@ final class WatchStream: ObservableObject {
     /// Convert user host input to an http(s) base URL string (without trailing path).
     /// Follows redirects for short URLs.
     private func resolveBase(_ input: String) async -> String {
-        let http: String
-        if input.hasPrefix("http://") || input.hasPrefix("https://") {
-            http = input
-        } else if input.hasPrefix("ws://") {
-            http = "http://" + input.dropFirst("ws://".count)
-        } else if input.hasPrefix("wss://") {
-            http = "https://" + input.dropFirst("wss://".count)
-        } else {
-            http = "http://\(input)"
-        }
+        let http = normalizedHTTPURLString(input)
         guard let url = URL(string: http) else { return http }
         // Follow redirects via HEAD (short URLs like spoo.me).
         var req = URLRequest(url: url)
@@ -133,4 +124,16 @@ final class WatchStream: ObservableObject {
         } catch { /* fall through */ }
         return http
     }
+}
+
+/// Turn user host input into an http(s) URL string. Tolerates sloppy schemes typed on the
+/// watch keyboard ("http:/host", "HTTP://host", "ws:host") so they don't become "http://http:/host".
+func normalizedHTTPURLString(_ input: String) -> String {
+    let trimmed = input.trimmingCharacters(in: .whitespacesAndNewlines)
+    guard let match = trimmed.range(of: #"^(https?|wss?):/*"#, options: [.regularExpression, .caseInsensitive]) else {
+        return "http://\(trimmed)"
+    }
+    let scheme = trimmed[match].lowercased()
+    let secure = scheme.hasPrefix("https") || scheme.hasPrefix("wss")
+    return (secure ? "https://" : "http://") + trimmed[match.upperBound...]
 }

@@ -183,17 +183,7 @@ struct HostEditor: View {
         probing = true
         probeResult = ""
         // Probe the actual host the user is connecting to, not apple.com.
-        let trimmed = host.trimmingCharacters(in: .whitespaces)
-        let httpURLString: String
-        if trimmed.hasPrefix("http://") || trimmed.hasPrefix("https://") {
-            httpURLString = trimmed
-        } else if trimmed.hasPrefix("ws://") {
-            httpURLString = "http://" + trimmed.dropFirst("ws://".count)
-        } else if trimmed.hasPrefix("wss://") {
-            httpURLString = "https://" + trimmed.dropFirst("wss://".count)
-        } else {
-            httpURLString = "http://\(trimmed)"
-        }
+        let httpURLString = normalizedHTTPURLString(host)
         guard let testURL = URL(string: httpURLString) else {
             probing = false; probeResult = "URL 오류"; return
         }
